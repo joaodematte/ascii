@@ -1,4 +1,4 @@
 (executable
  (public_name ascii)
  (name main)
- (libraries ascii fmt))
+ (libraries ascii core fmt))

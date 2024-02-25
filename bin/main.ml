@@ -140,16 +140,43 @@ let format_int i n =
   String.make (n - String.length string_number) ' ' ^ string_number
 ;;
 
-let format_string s n = s ^ String.make (n - String.length s) ' '
+let format_string s n left =
+  if left
+  then String.make (n - String.length s) ' ' ^ s
+  else s ^ String.make (n - String.length s) ' '
+;;
 
-let () =
+let int_to_hex i = Printf.sprintf "%02X" i
+
+let print_ascii_table =
   let lines = 15 in
   let columns = 7 in
+  for k = 0 to columns do
+    if k == columns
+    then
+      Fmt.pr
+        "%s %s %s@."
+        (format_string "DEC" 5 true)
+        (format_string "HEX" 3 true)
+        (String.make 3 ' ')
+    else
+      Fmt.pr
+        "%s %s %s"
+        (format_string "DEC" 5 true)
+        (format_string "HEX" 3 true)
+        (String.make 3 ' ')
+  done;
   for i = 0 to lines do
     for j = 0 to columns do
       let entry = (16 * j) + i in
-      Fmt.pr "%s %s" (format_int entry 5) (format_string (get_value entry) 3)
+      Fmt.pr
+        "%s %s %s"
+        (format_int entry 5)
+        (format_string (int_to_hex entry) 3 true)
+        (format_string (get_value entry) 3 false)
     done;
     Fmt.pr "@."
   done
 ;;
+
+let () = print_ascii_table
